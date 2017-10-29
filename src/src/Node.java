@@ -18,6 +18,16 @@ public class Node {
 	public int getPlayerID() {
 		return playerID;
 	}
+	
+	public String getPlayerName() {
+		switch (playerID) {
+		case 0: return "blue";
+		case 1: return "green";
+		case 2: return "yellow";
+		}
+		return "";
+	}
+	
 	public void incHorizantalBy(int x) {
 		horizantal += x;
 	}

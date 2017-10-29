@@ -20,11 +20,17 @@ public class K_in_a_row {
 	private int players;
 	private Node[][] field;
 	private int turnCount;
+	private int bluePoints;
+	private int greenPoints;
+	private int yellowPoints;
 	
 	public K_in_a_row(int k, int players) {
 		this.k = k;
 		this.players = players;
 		turnCount = 0;
+		bluePoints = 0;
+		greenPoints = 0;
+		yellowPoints = 0;
 	}
 	
 	private JButton createButton(final int row, final int col) {
@@ -48,6 +54,25 @@ public class K_in_a_row {
 							break;
 					}
 					turnCount++;
+					if (turnCount >= field.length * field[0].length) {
+						if (bluePoints > greenPoints && bluePoints > yellowPoints) {
+							System.out.println("\nThe winner is BLUE!");							
+						} else if (greenPoints > bluePoints && greenPoints > yellowPoints) {
+							System.out.println("The winner is GREEN!");
+						} else if (yellowPoints > bluePoints && yellowPoints > greenPoints) {
+							System.out.println("The winner is YELLOW!");
+						} else {
+							System.out.println("\nThe game finished with a tie!");
+						}
+						//System.out.println("The game has finshes after " + turnCount + " rounds.");
+						for (int i = 0; i < players; i++) {
+							switch (i) {
+							case 0: System.out.println("Blue scored " + bluePoints + " points."); break;
+							case 1: System.out.println("Green scored " + greenPoints + " points.");  break;
+							case 2: System.out.println("Yellow scored " + yellowPoints + " points."); break;
+							}									
+						}
+					}
 				}
 			}
         });
@@ -73,6 +98,14 @@ public class K_in_a_row {
 		frame.setVisible(true);
 	}
 	
+	public void addPointTo(int playerID) {
+		switch (playerID) {
+		case 0: bluePoints++; break;
+		case 1: greenPoints++; break;
+		case 2: yellowPoints++; break;
+		}
+	}
+	
 	public boolean addNode(int x, int y, int playerID) {
 		if (field[x][y] == null) {
 			field[x][y] = new Node(playerID);
@@ -94,7 +127,8 @@ public class K_in_a_row {
 					node.incHorizantalBy(nieghbor.getHorizantal());
 					nieghbor.incHorizantalBy(1);
 					if (node.getHorizantal() >= k) {
-						System.out.println("Horizantal win");
+						addPointTo(node.getPlayerID());
+						System.out.println("Horizantal point for " + node.getPlayerName());
 						break;
 					}
 				}
@@ -110,7 +144,8 @@ public class K_in_a_row {
 					node.incVerticalBy(nieghbor.getVertical());
 					nieghbor.incVerticalBy(1);
 					if (node.getVertical() >= k) {
-						System.out.println("vertical win");
+						addPointTo(node.getPlayerID());
+						System.out.println("vertical point for " + node.getPlayerName());
 						break;
 					}
 				}
@@ -127,7 +162,8 @@ public class K_in_a_row {
 					node.incLRdiagonalBy(nieghbor.getLRdiagonal());
 					nieghbor.incLRdiagonalBy(1);
 					if (node.getLRdiagonal() >= k) {
-						System.out.println("diagonal win");
+						addPointTo(node.getPlayerID());
+						System.out.println("diagonal point for " + node.getPlayerName());
 						break;
 					}
 				}
@@ -145,7 +181,8 @@ public class K_in_a_row {
 					node.incRLdiagonalBy(nieghbor.getRLdiagonal());
 					nieghbor.incRLdiagonalBy(1);
 					if (node.getRLdiagonal() >= k) {
-						System.out.println("diagonal win");
+						addPointTo(node.getPlayerID());
+						System.out.println("diagonal point for " + node.getPlayerName());
 						break;
 					}
 				}
@@ -166,11 +203,15 @@ public class K_in_a_row {
 	public static void start() {
 		JDialog dialog = new JDialog();
 		dialog.setLocationRelativeTo(null);
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setTitle("Start menu");
 		dialog.setPreferredSize(new Dimension(400,330));
 		JPanel[] panelList = new JPanel[4];
 		Font font = new Font("Serif", Font.PLAIN, 30);
-		for (int i = 0; i < panelList.length; i++)
+		for (int i = 0; i < panelList.length; i++) {
 			panelList[i] = new JPanel();
+			panelList[i].setBackground(Color.decode("#E6CFB8"));
+		}
 		JLabel kLabel = new JLabel("Choose K ");
 		kLabel.setFont(font);
 		panelList[0].add(kLabel);
@@ -225,12 +266,6 @@ public class K_in_a_row {
 		dialog.pack();
 		dialog.setVisible(true);
 	}
-	
-	public void finish (String player, String winType) {
-		
-	}
-	
-	
 	
 	public static void main(String[] args) {
 		start();
