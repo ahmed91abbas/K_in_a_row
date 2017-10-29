@@ -5,14 +5,19 @@ public class Node {
 	private int vertical;
 	private int LRdiagonal;
 	private int RLdiagonal;
+	private int playerID;
 	
-	public Node() {
+	public Node(int playerID) {
+			this.playerID = playerID;
 			horizantal = 1;
 			vertical = 1;
 			LRdiagonal = 1;
 			RLdiagonal = 1;
 		}
 	
+	public int getPlayerID() {
+		return playerID;
+	}
 	public void incHorizantalBy(int x) {
 		horizantal += x;
 	}
